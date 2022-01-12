@@ -12,7 +12,9 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField]
-    private float _moveSpeed;
+    private float _acceleration;
+    [SerializeField]
+    private float _maxSpeed;
 
     private Camera _camera;
     private Vector2 _movedirection;
@@ -39,7 +41,8 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 direction = _cameraForward * _movedirection.y + _cameraRight * _movedirection.x;
 
-        _playerRigidbody.velocity += (direction) * _moveSpeed * Time.fixedDeltaTime;
+        if(_playerRigidbody.velocity.magnitude < _maxSpeed)
+        _playerRigidbody.velocity += (direction) * _acceleration * Time.fixedDeltaTime;
 
         if(direction != Vector3.zero)
         _playerRigidbody.MoveRotation(Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(direction),0.35f));
