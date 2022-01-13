@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public interface IInteractable
+public interface IInteractable<T>
 {
-    void Interact();
+    void Interact(T instigator);
+    string GetInteractionInfo();
 }
