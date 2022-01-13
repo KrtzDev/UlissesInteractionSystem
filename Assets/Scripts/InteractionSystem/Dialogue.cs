@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Dialogue : MonoBehaviour,IInteractable<GameObject>
@@ -15,8 +13,17 @@ public class Dialogue : MonoBehaviour,IInteractable<GameObject>
 
     public void Interact(GameObject instigator)
     {
-        Debug.Log("Start Dialogue with " + instigator.GetComponent<PlayerData>().Name); 
-                                        //TODO: Deactivate Movement
-                                        //TODO: Simple Dialogue
+        string _instigatorName;
+
+        if (instigator.TryGetComponent(out PlayerData playerData))
+        {
+            _instigatorName = playerData.Name;
+        }
+        else
+        {
+            Debug.Log("Instigator has no Name");
+            return;
+        }
+        Debug.Log("Start Dialogue with " + instigator.GetComponent<PlayerData>().Name); //TODO: DialogueSystem
     }
 }

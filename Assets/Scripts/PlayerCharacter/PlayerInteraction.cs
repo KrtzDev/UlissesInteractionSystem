@@ -1,20 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class PlayerInteraction : MonoBehaviour
 {
+
     [Header("Settings")]
     [SerializeField]
-    private float maxInteractionDistance;
+    private float _maxInteractionDistance;
 
     private Camera _camera;
-    private RaycastHit _interactionHit;
+    private TMP_Text _interactioninfoTextField;
 
     private void Start()
     {
         _camera = Camera.main;
+        _interactioninfoTextField = FindObjectOfType<UIData>().InteractionInfoTextField;
     }
 
     private void Update()
@@ -26,24 +27,39 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (context.performed)
         {
-            if (_interactionHit.transform.TryGetComponent(out IInteractable<GameObject> interactable))
+            RaycastHit hit;
+
+            if (Physics.Raycast(_camera.ViewportPointToRay(Vector3.one / 2f), out hit, _maxInteractionDistance))
             {
-                interactable.Interact(this.gameObject);
+                if (hit.transform.TryGetComponent(out IInteractable<GameObject> interactable))
+                {
+                    interactable.Interact(this.gameObject);
+                }
             }
         }
     }
 
-    void InteractionRayHit()
+    private void InteractionRayHit()
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(_camera.ViewportPointToRay(Vector3.one / 2f), out hit, maxInteractionDistance))
+        if (Physics.Raycast(_camera.ViewportPointToRay(Vector3.one / 2f), out hit, _maxInteractionDistance))
         {
-            _interactionHit = hit;
-            if (_interactionHit.transform.TryGetComponent(out IInteractable<GameObject> interactable))
+            if (hit.transform.TryGetComponent(out IInteractable<GameObject> interactable))
             {
-                Debug.Log(interactable.GetInteractionInfo()); //TODO: send Interaction info to UI-Element
+                _interactioninfoTextField.text = "LMB - " + interactable.GetInteractionInfo();
+                _interactioninfoTextField.transform.parent.gameObject.SetActive(true);
             }
+            else
+            {
+                _interactioninfoTextField.transform.parent.gameObject.SetActive(false);
+                _interactioninfoTextField.text = string.Empty;
+            }
+        }
+        else
+        {
+            _interactioninfoTextField.transform.parent.gameObject.SetActive(false);
+            _interactioninfoTextField.text = string.Empty;
         }
     }
 }

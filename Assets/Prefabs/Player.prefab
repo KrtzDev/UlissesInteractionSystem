@@ -393,7 +393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _name: Krtz
-  _kickForce: 50
+  _kickForce: 150
 --- !u!114 &5411840784426814849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,7 +421,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae675a3d00a686642b47ee5efbb64ddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxInteractionDistance: 50
+  _maxInteractionDistance: 10
+  _interactioninfoTextField: {fileID: 0}
 --- !u!114 &7871064913182915106
 MonoBehaviour:
   m_ObjectHideFlags: 0
