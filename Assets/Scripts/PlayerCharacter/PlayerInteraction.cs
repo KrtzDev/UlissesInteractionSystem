@@ -10,21 +10,39 @@ public class PlayerInteraction : MonoBehaviour
     private float maxInteractionDistance;
 
     private Camera _camera;
+    private RaycastHit _interactionHit;
 
     private void Start()
     {
         _camera = Camera.main;
     }
 
+    private void Update()
+    {
+        InteractionRayHit();
+    }
+
     public void OnInteraction(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if (_interactionHit.transform.TryGetComponent(out IInteractable<GameObject> interactable))
+            {
+                interactable.Interact(this.gameObject);
+            }
+        }
+    }
+
+    void InteractionRayHit()
     {
         RaycastHit hit;
 
-        if(Physics.Raycast(_camera.ViewportPointToRay(Vector3.one/2f),out hit, maxInteractionDistance))
+        if (Physics.Raycast(_camera.ViewportPointToRay(Vector3.one / 2f), out hit, maxInteractionDistance))
         {
-            if (hit.transform.TryGetComponent(out IInteractable interactable))
+            _interactionHit = hit;
+            if (_interactionHit.transform.TryGetComponent(out IInteractable<GameObject> interactable))
             {
-                interactable.Interact();
+                Debug.Log(interactable.GetInteractionInfo()); //TODO: send Interaction info to UI-Element
             }
         }
     }
