@@ -47,7 +47,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (hit.transform.TryGetComponent(out IInteractable<GameObject> interactable))
             {
-                _interactioninfoTextField.text = "LMB - " + interactable.GetInteractionInfo();
+                _interactioninfoTextField.text = interactable.GetInteractionInfo();
                 _interactioninfoTextField.transform.parent.gameObject.SetActive(true);
             }
             else
